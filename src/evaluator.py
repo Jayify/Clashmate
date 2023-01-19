@@ -36,7 +36,7 @@ def get_user(player_tag):
     if league == 0:
         league = 1
     # calculate rating
-    rating = (hall)  + (trophies/300) +  (donations/100) + (donations/donations_received) + (war_stars/100) + (clan_capital/25000) + (league/3)
+    rating = round((hall)  + (trophies/300) +  (donations/100) + (donations/donations_received) + (war_stars/100) + (clan_capital/25000) + (league/3), 2)
     # return player name and rating
     return user_json['name'], rating
 

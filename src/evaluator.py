@@ -9,9 +9,36 @@ headers = {
 
 def get_user(player_tag):
     player = player_tag.replace('#', '%23')
+    # convert tag to correct format
     response = requests.get('https://api.clashofclans.com/v1/players/'+player, headers = headers)
-    user_json = response.json() # convert object to json
-    return user_json['name']
+    # convert object to json
+    user_json = response.json() 
+    # pull out useful stats
+    hall = user_json['townHallLevel']
+    trophies = user_json['trophies']
+    war_stars = user_json['warStars']
+    donations = user_json['donations']
+    donations_received = user_json['donationsReceived']
+    clan_capital = user_json['clanCapitalContributions']
+    if 'league' not in user_json:
+        league = 0
+    else:
+        league = user_json['league']['id']-29000000
+    #set low default value for 0 values
+    if donations == 0:
+        donations = 1
+    if donations_received == 0:
+        donations_received = 1
+    if war_stars == 0:
+        war_stars = 1
+    if clan_capital == 0:
+        clan_capital = 1
+    if league == 0:
+        league = 1
+    # calculate rating
+    rating = (hall)  + (trophies/300) +  (donations/100) + (donations/donations_received) + (war_stars/100) + (clan_capital/25000) + (league/3)
+    # return player name and rating
+    return user_json['name'], rating
 
 
 

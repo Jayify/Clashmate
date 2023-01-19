@@ -1,5 +1,6 @@
 import requests
 import config # config.py file with auth_key
+import time
 
 headers = {
     'Accept': 'application/json',
@@ -41,11 +42,12 @@ def get_user(player_tag):
     return user_json['name'], rating
 
 
-
 def get_clan():
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
     print('----- Evaluating clan: "' + response.json()['name'] + '" with ' + str(len(response.json()['memberList'])) + ' members -----')
     for member in response.json()['memberList']:
         print(get_user(member['tag']))
 
+start = time.time()
 get_clan()
+print(round(time.time() - start, 2), "seconds")

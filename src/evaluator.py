@@ -28,8 +28,6 @@ def get_user(player_tag):
     #set low default value for 0 values
     if donations == 0:
         donations = 1
-    if donations_received == 0:
-        donations_received = 1
     if war_stars == 0:
         war_stars = 1
     if clan_capital == 0:
@@ -37,7 +35,9 @@ def get_user(player_tag):
     if league == 0:
         league = 1
     # calculate rating
-    rating = round((hall)  + (trophies/300) +  (donations/100) + (donations/donations_received) + (war_stars/100) + (clan_capital/25000) + (league/3), 2)
+    rating = round((hall)  + (trophies/300) +  (donations/100) + (war_stars/100) + (clan_capital/25000) + (league/3), 2)
+    # print(user_json['name'], "hall", hall, "trophies", (trophies/300), "donations", (donations/100), "war", 
+    #(war_stars/100), "capital", (clan_capital/25000), "league", (league/3))
     # return player name and rating
     return user_json['name'], rating
 

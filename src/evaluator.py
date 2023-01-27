@@ -42,11 +42,22 @@ def get_user(player_tag):
     return user_json['name'], rating
 
 
+def sortFunc(e):
+    return e[1]
+
+
 def get_clan():
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
+    members = []
     print('----- Evaluating clan: "' + response.json()['name'] + '" with ' + str(len(response.json()['memberList'])) + ' members -----')
     for member in response.json()['memberList']:
-        print(get_user(member['tag']))
+        members.append(get_user(member['tag']))
+    members.sort(key=sortFunc) # order by rating
+    members.reverse() # highest rating first
+    print()
+    print('----- Sorted by rating -----')
+    for member in members:
+        print(member[0], ":", member[1])
 
 start = time.time()
 get_clan()

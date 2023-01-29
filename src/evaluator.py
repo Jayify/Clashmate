@@ -48,8 +48,9 @@ def sortFunc(e):
 
 def get_clan():
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
+    clan = response.json() 
     members = []
-    print('----- Evaluating clan: "' + response.json()['name'] + '" with ' + str(len(response.json()['memberList'])) + ' members -----')
+    print('----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     for member in response.json()['memberList']:
         members.append(get_user(member['tag']))
     members.sort(key=sortFunc) # order by rating

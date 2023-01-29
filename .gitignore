@@ -130,3 +130,6 @@ dmypy.json
 
 #config files
 config.py
+
+#data files
+player_data.txt

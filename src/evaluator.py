@@ -45,13 +45,25 @@ def get_user(player_tag):
 def sortFunc(e):
     return e[1]
 
+# progress bar from https://stackoverflow.com/a/37630397
+def progress_bar(current, total, bar_length=20):
+    fraction = current / total
+    arrow = int(fraction * bar_length - 1) * '-' + '>'
+    padding = int(bar_length - len(arrow)) * ' '
+    ending = '\n' if current == total else '\r'
+
+    print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%', end=ending)
+
 
 def get_clan():
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
     clan = response.json() 
     members = []
     print('----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
-    for member in response.json()['memberList']:
+    x = 0
+    for member in clan['memberList']:
+        x += 1
+        progress_bar(x, len(clan['memberList']))
         members.append(get_user(member['tag']))
     members.sort(key=sortFunc) # order by rating
     members.reverse() # highest rating first

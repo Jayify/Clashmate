@@ -7,7 +7,6 @@ headers = {
     'authorization': config.auth_key
 }
 
-
 def get_user(player_tag):
     player = player_tag.replace('#', '%23')
     # convert tag to correct format
@@ -41,7 +40,6 @@ def get_user(player_tag):
     # return player name and rating
     return user_json['name'], rating
 
-
 def sortFunc(e):
     return e[1]
 
@@ -54,24 +52,32 @@ def progress_bar(current, total, bar_length=20):
 
     print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%', end=ending)
 
-
-def get_clan():
+def main():
+    # get clan data
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
     clan = response.json() 
     members = []
     print('----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     x = 0
+    
+    # get rating for each player
     for member in clan['memberList']:
         x += 1
         progress_bar(x, len(clan['memberList']))
         members.append(get_user(member['tag']))
-    members.sort(key=sortFunc) # order by rating
+
+    # sort players by rating
+    members.sort(key=sortFunc) # order by rating value
     members.reverse() # highest rating first
+
+    # output results
     print()
     print('----- Sorted by rating -----')
     for member in members:
         print(member[0], ":", member[1])
 
+
+# start code
 start = time.time()
-get_clan()
+main()
 print(round(time.time() - start, 2), "seconds")

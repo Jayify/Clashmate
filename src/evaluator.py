@@ -78,6 +78,7 @@ def main():
 
 
 # start code
-start = time.time()
-main()
-print(round(time.time() - start, 2), "seconds")
+if __name__ == '__main__':
+    start = time.time()
+    main()
+    print(round(time.time() - start, 2), "seconds")

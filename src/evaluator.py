@@ -38,8 +38,8 @@ def get_user(player_tag, manual_data):
     # calculate rating
     rating = round(hall  + (trophies/300) + (donations/100) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
 
-    print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
-    "league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat) 
+    #print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
+    #"league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat) 
     # return player name and rating
     return user_json['name'], rating
 
@@ -71,17 +71,16 @@ def retrieve_data(player_tag, manual_data):
         else:
                 return 0, 0, 0, 0, 0
 
-def main():
+def evaluate():
     # get clan data
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
     clan = response.json() 
 
     # get manual player data
-    print("Getting manual data")
     manual_data = get_file()
     
     members = []
-    print('----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
+    print('\n----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     x = 0
 
     # get rating for each player
@@ -100,8 +99,28 @@ def main():
     for member in members:
         print(member[0], ":", member[1])
 
+
+def main():
+    run = True
+    print("Starting CoC Clanmate Evaluator program")
+
+    while run:
+        print()
+        input_num = input("Enter a command number: \n - Evaluate clan: 1\n - Update manual data\n - Quit: 3\n")
+        if input_num == "1":
+            start = time.time()
+            evaluate()
+            print("- runtime:", round(time.time() - start, 2), "seconds -")
+            run = False
+        elif input_num == "2":
+            print("Updating manual data")
+        elif input_num == "3":
+            print("Quitting")
+            run = False
+        else:
+            print("WARNING: Enter a valid command number")
+    print("Program ended")
+
 # start code
 if __name__ == '__main__':
-    start = time.time()
     main()
-    print(round(time.time() - start, 2), "seconds")

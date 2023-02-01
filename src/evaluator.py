@@ -71,6 +71,34 @@ def retrieve_data(player_tag, manual_data):
         else:
                 return 0, 0, 0, 0, 0
 
+def in_dict_list(key, value, list):
+    for entry in list:
+        if entry[key] == value:
+            return entry
+    return None
+
+def update_members():
+    # get clan members
+    response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
+    clan = response.json() 
+    # get manual data
+    manual_data = get_file()
+    new_data = []
+    x = 0
+    for member in clan['memberList']:
+        x += 1
+        progress_bar(x, len(clan['memberList']))
+        search = in_dict_list('tag', member['tag'], manual_data)
+        if search is None:
+            new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": 0, "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})
+        else:
+            new_data.append(search)
+    f = open("player_data.txt", "w")
+    f.write(json.dumps(new_data, indent=2))
+    f.close()
+    print("\nClan members have been updated. You may now edit the player_data.txt file to add or update manual data.")
+
+
 def evaluate():
     # get clan data
     response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)

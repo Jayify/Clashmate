@@ -120,6 +120,7 @@ def evaluate():
         members.append(get_user(member['tag'], manual_data))
 
     # sort players by rating
+    print("\nSorting by rating")
     members.sort(key=sortFunc) # order by rating value
     members.reverse() # highest rating first
 
@@ -136,19 +137,20 @@ def main():
 
     while run:
         print()
-        input_num = input("Enter a command number: \n - Evaluate clan: 1\n - Update manual data\n - Quit: 3\n")
+        input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Update manual data\n - 3: Quit:\n")
         if input_num == "1":
             start = time.time()
             evaluate()
-            print("- runtime:", round(time.time() - start, 2), "seconds -")
+            print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
-            print("Updating manual data")
+            print("\nUpdating manual data\n")
+            update_members()
         elif input_num == "3":
-            print("Quitting")
+            print("\nQuitting")
             run = False
         else:
-            print("WARNING: Enter a valid command number")
+            print("\nWARNING: Enter a valid command number")
     print("Program ended")
 
 # start code

@@ -60,6 +60,8 @@ def get_file():
     f = open("player_data.txt", "r")
     data = f.read()
     f.close()
+    if data == "":
+        data = "[]" # if file is empty, set to empty list
     json_data = json.loads(data)
     return json_data
 

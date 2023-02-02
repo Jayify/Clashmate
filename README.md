@@ -21,7 +21,7 @@ Developed by Jayden Houghton, 2023
   <li>Open the files in a code editor such as VS Code (with a Python extension) or PyCharm.</li>
   <li>Remove "example_" from the name of the config and player_data files.</li>
   <li>Generate a CoC API token from the developer page: https://developer.clashofclans.com/#/register and copy to the config file.
-  <li>(optional) Run the program and choose option 2, then add any manual data. The default values are 0. The program can be run without this data, however these stat fields will not be taken into account during calculation so the overall ratings will not be as accurate to the player's actual contribution.</li>
+  <li>(optional) Run the program and choose option 2, then add any manual data to player_data.txt. The default values are 0. The program can be run without this data, however these stat fields will not be taken into account during calculation so the overall ratings will not be as accurate to the player's actual contribution.</li>
   <li>Run the program and choose option 1 for clan evaluation.</li>
   <li>Update the manual data over time.</li>
 </ol>

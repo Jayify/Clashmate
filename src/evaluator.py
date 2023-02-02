@@ -28,7 +28,7 @@ def retrieve_data(player_tag, manual_data):
         if player_tag == player["tag"]:
             return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
         else:
-                return 0, 0, 0, 0, 0
+            return 0, 0, 0, 0, 0
 
 # find if player is already in manual data
 def in_dict_list(key, value, list):
@@ -151,11 +151,22 @@ def main(old_clan_tag):
     progress_bar(1, 100, bar_length=20)
     manual_data = get_file()
     progress_bar(100, 100, bar_length=20)
+    
+    # update clan members in manual data
+    print("\nUpdating manual data")
+    update_members(clan_data["memberList"], manual_data)
+
+    # get updated manual player data
+    print("\nRetrieving updated manual data")
+    progress_bar(1, 100, bar_length=20)
+    manual_data = get_file()
+    progress_bar(100, 100, bar_length=20)
+
 
     # user input to choose action
     while run:
         print()
-        input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Update manual data\n - 3: Quit:\n")
+        input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Quit:\n")
         if input_num == "1":
             # evaluate clan
             start = time.time()
@@ -163,10 +174,6 @@ def main(old_clan_tag):
             print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
-            # update manual data
-            print("\nUpdating manual data\n")
-            update_members(clan_data["memberList"], manual_data)
-        elif input_num == "3":
             # quit
             print("\nQuitting")
             run = False

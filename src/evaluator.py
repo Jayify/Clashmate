@@ -79,9 +79,10 @@ def in_dict_list(key, value, list):
             return entry
     return None
 
-def update_members():
+def update_members(clan_tag):
     # get clan members
-    response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89/members', headers = headers)
+    
+    response = requests.get('https://api.clashofclans.com/v1/clans/'+clan_tag+'/members', headers = headers)
     clan_members = response.json()['items']
     # get manual data
     manual_data = get_file()
@@ -101,9 +102,9 @@ def update_members():
     print("\nClan members have been updated. You may now edit the player_data.txt file to add or update manual data.")
 
 
-def evaluate():
+def evaluate(clan_tag):
     # get clan data
-    response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
+    response = requests.get('https://api.clashofclans.com/v1/clans/'+clan_tag, headers = headers)
     clan = response.json() 
 
     # get manual player data
@@ -131,7 +132,8 @@ def evaluate():
         print(member[0], ":", member[1])
 
 
-def main():
+def main(old_clan_tag):
+    clan_tag = old_clan_tag.replace('#', '%23')
     run = True
     print("Starting CoC Clanmate Evaluator program")
 
@@ -140,12 +142,12 @@ def main():
         input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Update manual data\n - 3: Quit:\n")
         if input_num == "1":
             start = time.time()
-            evaluate()
+            evaluate(clan_tag)
             print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
             print("\nUpdating manual data\n")
-            update_members()
+            update_members(clan_tag)
         elif input_num == "3":
             print("\nQuitting")
             run = False
@@ -155,4 +157,4 @@ def main():
 
 # start code
 if __name__ == '__main__':
-    main()
+    main(config.clan_tag)

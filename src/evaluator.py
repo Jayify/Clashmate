@@ -1,19 +1,60 @@
 import requests
 import time
 import json
-import config # config.py file with auth_key
+import config # config.py file
 
+# api request headers
 headers = {
     'Accept': 'application/json',
     'authorization': config.auth_key
 }
 
-def get_user(player_tag, manual_data):
-    player = player_tag.replace('#', '%23')
-    # convert tag to correct format
+
+# retrieve bulk data from file and convert to json
+def get_file():
+    # get file data
+    f = open("player_data.txt", "r")
+    data = f.read()
+    f.close()
+    if data == "":
+        data = "[]" # if file is empty, set to empty list
+    json_data = json.loads(data)
+    return json_data
+
+# retrieve values from json data for individual player
+def retrieve_data(player_tag, manual_data):
+    data = []
+    for player in manual_data:
+        if player_tag == player["tag"]:
+            return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
+        else:
+                return 0, 0, 0, 0, 0
+
+# find if player is already in manual data
+def in_dict_list(key, value, list):
+    for entry in list:
+        if entry[key] == value:
+            return entry
+    return None
+
+# sort players by rating
+def sortFunc(e):
+    return e[1]
+
+# progress bar from https://stackoverflow.com/a/37630397
+def progress_bar(current, total, bar_length=20):
+    fraction = current / total
+    arrow = int(fraction * bar_length - 1) * '-' + '>'
+    padding = int(bar_length - len(arrow)) * ' '
+    ending = '\n' if current == total else '\r'
+    print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%', end=ending)
+
+# get individual player data and calculate rating
+def calculate_user(player_tag, manual_data):
+    player = player_tag.replace('#', '%23')# convert tag to correct format
     response = requests.get('https://api.clashofclans.com/v1/players/'+player, headers = headers)
-    # convert object to json
-    user_json = response.json() 
+    user_json = response.json() # convert object to json
+    
     # pull out useful stats
     hall = user_json['townHallLevel']
     trophies = user_json['trophies']
@@ -44,50 +85,17 @@ def get_user(player_tag, manual_data):
     # calculate rating
     rating = round(hall  + (trophies/300) + (donations/100) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
 
-    #print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
-    #"league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat) 
+    # print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
+    # "league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat)
+    
     # return player name and rating
     return user_json['name'], rating
 
-def sortFunc(e):
-    return e[1]
-
-# progress bar from https://stackoverflow.com/a/37630397
-def progress_bar(current, total, bar_length=20):
-    fraction = current / total
-    arrow = int(fraction * bar_length - 1) * '-' + '>'
-    padding = int(bar_length - len(arrow)) * ' '
-    ending = '\n' if current == total else '\r'
-
-    print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%', end=ending)
-
-def get_file():
-    # get file data
-    f = open("player_data.txt", "r")
-    data = f.read()
-    f.close()
-    if data == "":
-        data = "[]" # if file is empty, set to empty list
-    json_data = json.loads(data)
-    return json_data
-
-def retrieve_data(player_tag, manual_data):
-    data = []
-    for player in manual_data:
-        if player_tag == player["tag"]:
-            return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
-        else:
-                return 0, 0, 0, 0, 0
-
-def in_dict_list(key, value, list):
-    for entry in list:
-        if entry[key] == value:
-            return entry
-    return None
-
+# update list of members in manual player data file
 def update_members(clan_members, manual_data):   
     new_data = []
     x = 0
+
     for member in clan_members:
         x += 1
         progress_bar(x, len(clan_members))
@@ -101,6 +109,7 @@ def update_members(clan_members, manual_data):
     f.close()
     print("\nClan members have been updated. You may now edit the player_data.txt file to add or update manual data.")
 
+# iterate through clan members, calculate rating and sort by rating
 def evaluate(clan, manual_data):    
     print('\n----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     members = []
@@ -110,7 +119,7 @@ def evaluate(clan, manual_data):
     for member in clan['memberList']:
         x += 1
         progress_bar(x, len(clan['memberList']))
-        members.append(get_user(member['tag'], manual_data))
+        members.append(calculate_user(member['tag'], manual_data))
 
     # sort players by rating
     print("\nSorting by rating")
@@ -124,6 +133,7 @@ def evaluate(clan, manual_data):
         print(member[0], ":", member[1])
 
 
+# main program
 def main(old_clan_tag):
     run = True
     print("Starting CoC Clanmate Evaluator program")
@@ -147,17 +157,21 @@ def main(old_clan_tag):
         print()
         input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Update manual data\n - 3: Quit:\n")
         if input_num == "1":
+            # evaluate clan
             start = time.time()
             evaluate(clan_data, manual_data)
             print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
+            # update manual data
             print("\nUpdating manual data\n")
             update_members(clan_data["memberList"], manual_data)
         elif input_num == "3":
+            # quit
             print("\nQuitting")
             run = False
         else:
+            # error
             print("\nWARNING: Enter a valid command number")
     print("Program ended")
 

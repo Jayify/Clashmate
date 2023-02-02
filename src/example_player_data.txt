@@ -1,3 +1,3 @@
 # Remove the "_example" from this file's name and leave the file blank. 
-# To add or update manual data, first run the program and choose option 2. This will update this file to have the correct format and correct clan members.
+# To add or update manual data, first run the program and close it after the initialisation. This will update this file to have the correct format and correct clan members.
 # Manual data can now be added/updated.

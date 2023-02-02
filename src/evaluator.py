@@ -50,7 +50,7 @@ def progress_bar(current, total, bar_length=20):
     print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%', end=ending)
 
 # get individual player data and calculate rating
-def calculate_user(player_tag, manual_data):
+def calculate_user(player_tag, manual_data, filters):
     player = player_tag.replace('#', '%23')# convert tag to correct format
     response = requests.get('https://api.clashofclans.com/v1/players/'+player, headers = headers)
     user_json = response.json() # convert object to json
@@ -58,23 +58,21 @@ def calculate_user(player_tag, manual_data):
     # pull out useful stats
     hall = user_json['townHallLevel']
     trophies = user_json['trophies']
-    war_stars = user_json['warStars']
     donations = user_json['donations']
     clan_capital = user_json['clanCapitalContributions']
     if 'league' not in user_json:
-        league = 0
+        if filters['displayUnranked']:
+            league = 0.1
+        else:
+            return None
     else:
         league = user_json['league']['id']-29000000
 
     #set low default value for 0 values to avoid divide by 0 error
     if donations == 0:
         donations = 0.1
-    if war_stars == 0:
-        war_stars = 0.1
     if clan_capital == 0:
         clan_capital = 0.1
-    if league == 0:
-        league = 0.1
 
     # get manual data
     if manual_data == []:
@@ -83,7 +81,7 @@ def calculate_user(player_tag, manual_data):
         warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
 
     # calculate rating
-    rating = round(hall  + (trophies/300) + (donations/100) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
+    rating = round(hall  + (trophies/300) + (donations/100) + (league/2) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
 
     # print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
     # "league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat)
@@ -107,10 +105,9 @@ def update_members(clan_members, manual_data):
     f = open("player_data.txt", "w")
     f.write(json.dumps(new_data, indent=2))
     f.close()
-    print("\nClan members have been updated. You may now edit the player_data.txt file to add or update manual data.")
 
 # iterate through clan members, calculate rating and sort by rating
-def evaluate(clan, manual_data):    
+def evaluate(clan, manual_data, filters):    
     print('\n----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     members = []
     x = 0
@@ -119,7 +116,11 @@ def evaluate(clan, manual_data):
     for member in clan['memberList']:
         x += 1
         progress_bar(x, len(clan['memberList']))
-        members.append(calculate_user(member['tag'], manual_data))
+        result = calculate_user(member['tag'], manual_data, filters)
+        if result == None:
+            continue
+        else:
+            members.append(result)
 
     # sort players by rating
     print("\nSorting by rating")
@@ -134,7 +135,7 @@ def evaluate(clan, manual_data):
 
 
 # main program
-def main(old_clan_tag):
+def main(old_clan_tag, filters):
     run = True
     print("Starting CoC Clanmate Evaluator program")
 
@@ -170,7 +171,7 @@ def main(old_clan_tag):
         if input_num == "1":
             # evaluate clan
             start = time.time()
-            evaluate(clan_data, manual_data)
+            evaluate(clan_data, manual_data, filters)
             print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
@@ -184,4 +185,4 @@ def main(old_clan_tag):
 
 # start code
 if __name__ == '__main__':
-    main(config.clan_tag)
+    main(config.clan_tag, config.filters)

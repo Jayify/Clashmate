@@ -81,15 +81,15 @@ def in_dict_list(key, value, list):
 
 def update_members():
     # get clan members
-    response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89', headers = headers)
-    clan = response.json() 
+    response = requests.get('https://api.clashofclans.com/v1/clans/%2329R2GLL89/members', headers = headers)
+    clan_members = response.json()['items']
     # get manual data
     manual_data = get_file()
     new_data = []
     x = 0
-    for member in clan['memberList']:
+    for member in clan_members:
         x += 1
-        progress_bar(x, len(clan['memberList']))
+        progress_bar(x, len(clan_members))
         search = in_dict_list('tag', member['tag'], manual_data)
         if search is None:
             new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": 0, "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})

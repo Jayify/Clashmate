@@ -2,6 +2,6 @@
 auth_key = 'Bearer AUTH_KEY'
 clan_tag = '#TAG_NUMBER'
 
-filters = {'displayPercent': 50, 'displayUnranked': False}
-# display members with a rating in the top X percent, integer between 1 and 100
+filters = {'displayNumber': 10, 'displayUnranked': False}
+# display members with the top X ratings, integer between 1 and clan size, set 50 for all members
 # toggle whether members who are not in a ranked league are displayed, boolean True or False

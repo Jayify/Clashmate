@@ -129,9 +129,14 @@ def evaluate(clan, manual_data, filters):
 
     # output results
     print()
-    print('----- Sorted by rating -----')
+    print('----- Members by Highest Evaluation Score -----')
+    print('- Filters: limit', filters['displayNumber'], 'players, display unranked players:', filters['displayUnranked'], '-')
+    x = 1
     for member in members:
-        print(member[0], ":", member[1])
+            print(member[0], ":", member[1])
+            x += 1
+            if x > filters['displayNumber']:
+                break
 
 
 # main program

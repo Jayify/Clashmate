@@ -27,7 +27,7 @@ def retrieve_data(player_tag, manual_data):
     for player in manual_data:
         if player_tag == player["tag"]:
             return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
-    return [0,0,0], 0, 0, 0, 0
+    return [0,0,0], 0, 0, 0.1, 0
 
 # find if player is already in manual data
 def in_dict_list(key, value, list):
@@ -74,10 +74,7 @@ def calculate_user(player_tag, manual_data, filters):
         clan_capital = 0.1
 
     # get manual data
-    if manual_data == []:
-        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = [0,0,0], 0, 0, 0.1, 0 # set clan games to 1 to avoid divide by 0 error
-    else:
-        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
+    warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
 
     # average war attacks
     warAttacks = sum(warAttacks)/len(warAttacks)

@@ -34,7 +34,11 @@ def get_user(player_tag, manual_data):
     if league == 0:
         league = 1
     # get manual data
-    warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
+    if manual_data == []:
+        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = 0, 0, 0, 0.1, 0 # set clan games to 1 to avoid divide by 0 error
+    else:
+        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
+
     # calculate rating
     rating = round(hall  + (trophies/300) + (donations/100) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
 

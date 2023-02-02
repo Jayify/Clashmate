@@ -27,8 +27,7 @@ def retrieve_data(player_tag, manual_data):
     for player in manual_data:
         if player_tag == player["tag"]:
             return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
-        else:
-            return 0, 0, 0, 0, 0
+    return [0,0,0], 0, 0, 0, 0
 
 # find if player is already in manual data
 def in_dict_list(key, value, list):
@@ -76,9 +75,12 @@ def calculate_user(player_tag, manual_data, filters):
 
     # get manual data
     if manual_data == []:
-        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = 0, 0, 0, 0.1, 0 # set clan games to 1 to avoid divide by 0 error
+        warAttacks, leagueAttacks, raidAttacks, clanGames, chat = [0,0,0], 0, 0, 0.1, 0 # set clan games to 1 to avoid divide by 0 error
     else:
         warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
+
+    # average war attacks
+    warAttacks = sum(warAttacks)/len(warAttacks)
 
     # calculate rating
     rating = round(hall  + (trophies/300) + (donations/100) + (league/2) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
@@ -99,7 +101,7 @@ def update_members(clan_members, manual_data):
         progress_bar(x, len(clan_members))
         search = in_dict_list('tag', member['tag'], manual_data)
         if search is None:
-            new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": 0, "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})
+            new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": [0,0,0], "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})
         else:
             new_data.append(search)
     f = open("player_data.txt", "w")

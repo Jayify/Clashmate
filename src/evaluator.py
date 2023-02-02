@@ -24,15 +24,17 @@ def get_user(player_tag, manual_data):
         league = 0
     else:
         league = user_json['league']['id']-29000000
-    #set low default value for 0 values
+
+    #set low default value for 0 values to avoid divide by 0 error
     if donations == 0:
-        donations = 1
+        donations = 0.1
     if war_stars == 0:
-        war_stars = 1
+        war_stars = 0.1
     if clan_capital == 0:
-        clan_capital = 1
+        clan_capital = 0.1
     if league == 0:
-        league = 1
+        league = 0.1
+
     # get manual data
     if manual_data == []:
         warAttacks, leagueAttacks, raidAttacks, clanGames, chat = 0, 0, 0, 0.1, 0 # set clan games to 1 to avoid divide by 0 error

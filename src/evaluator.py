@@ -85,13 +85,7 @@ def in_dict_list(key, value, list):
             return entry
     return None
 
-def update_members(clan_tag):
-    # get clan members
-    
-    response = requests.get('https://api.clashofclans.com/v1/clans/'+clan_tag+'/members', headers = headers)
-    clan_members = response.json()['items']
-    # get manual data
-    manual_data = get_file()
+def update_members(clan_members, manual_data):   
     new_data = []
     x = 0
     for member in clan_members:
@@ -107,17 +101,9 @@ def update_members(clan_tag):
     f.close()
     print("\nClan members have been updated. You may now edit the player_data.txt file to add or update manual data.")
 
-
-def evaluate(clan_tag):
-    # get clan data
-    response = requests.get('https://api.clashofclans.com/v1/clans/'+clan_tag, headers = headers)
-    clan = response.json() 
-
-    # get manual player data
-    manual_data = get_file()
-    
-    members = []
+def evaluate(clan, manual_data):    
     print('\n----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
+    members = []
     x = 0
 
     # get rating for each player
@@ -139,21 +125,35 @@ def evaluate(clan_tag):
 
 
 def main(old_clan_tag):
-    clan_tag = old_clan_tag.replace('#', '%23')
     run = True
     print("Starting CoC Clanmate Evaluator program")
 
+    # get clan data
+    print("\nRetrieving clan data")
+    progress_bar(1, 100, bar_length=20)
+    clan_tag = old_clan_tag.replace('#', '%23') # replace # with %23 for api call
+    response = requests.get('https://api.clashofclans.com/v1/clans/'+clan_tag, headers = headers)
+    clan_data = response.json() 
+    progress_bar(100, 100, bar_length=20)
+
+    # get manual player data
+    print("\nRetrieving manual data")
+    progress_bar(1, 100, bar_length=20)
+    manual_data = get_file()
+    progress_bar(100, 100, bar_length=20)
+
+    # user input to choose action
     while run:
         print()
         input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Update manual data\n - 3: Quit:\n")
         if input_num == "1":
             start = time.time()
-            evaluate(clan_tag)
+            evaluate(clan_data, manual_data)
             print("\n(runtime:", round(time.time() - start, 2), "second)")
             run = False
         elif input_num == "2":
             print("\nUpdating manual data\n")
-            update_members(clan_tag)
+            update_members(clan_data["memberList"], manual_data)
         elif input_num == "3":
             print("\nQuitting")
             run = False

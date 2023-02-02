@@ -16,7 +16,7 @@ Developed by Jayden Houghton, 2023
 
 ## Setup
 <ol>
-  <li>Download the files from this repository.</li>
+  <li>Download the most recent release from this repository.</li>
   <li>This program uses the Python requests module and will require it to be installed.</li>
   <li>Open the files in a code editor such as VS Code (with a Python extension) or PyCharm.</li>
   <li>Remove "example_" from the name of the config and player_data files.</li>

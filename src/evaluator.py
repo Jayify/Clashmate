@@ -141,7 +141,7 @@ def evaluate(clan, manual_data, filters):
 # main program
 def main(old_clan_tag, filters):
     run = True
-    print("Starting CoC Clanmate Evaluator program")
+    print("\n\nStarting Clashmate")
 
     # get clan data
     print("\nRetrieving clan data")

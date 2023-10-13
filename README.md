@@ -1,6 +1,9 @@
-# Clash of Clans Clanmate Evaluator
+# Clashmate
+
+Clashmate: a tool for Clash of Clans leaders to manage, tracking, and evaluate clan members.
+
 A simple Python program using the Clash of Clans (mobile game) developer API. The program is designed to identify actively participating and frequently contributing players in your clan, in order to assist the clan leader in choosing who deserves which clan roles.
-<br><br>
+
 Developed by Jayden Houghton, 2023
 <br><br>
 

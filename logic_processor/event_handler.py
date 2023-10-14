@@ -10,11 +10,11 @@
 # Imports
 import time
 
-import config # config.py file
 import data_manager.file_handler as file_handler
 import logic_processor.evaluator as evaluator
 import logic_processor.api_caller as api_caller
 import logic_processor.progress_tracker as progress_tracker
+import data_manager.data_handler as data_handler
 
 
 # Procedures
@@ -44,15 +44,15 @@ def setup(config_clan_tag):
     
     # Get manual player data
     progress_tracker.progress_bar(40, 100, "Setup", "Retrieving manual data", 20)
-    manual_data = file_handler.get_file()
+    manual_data = file_handler.read_file()
 
     # Update clan members in manual data
     progress_tracker.progress_bar(60, 100, "Setup", "Refreshing manual data", 20)
-    file_handler.update_members(clan_data["memberList"], manual_data)
+    data_handler.update_members(clan_data["memberList"], manual_data)
 
     # Get updated manual player data
     progress_tracker.progress_bar(80, 100, "Setup", "Retrieving updated manual data", 20)
-    manual_data = file_handler.get_file()
+    manual_data = file_handler.read_file()
     progress_tracker.progress_bar(100, 100, "Setup", "Complete", 20)
 
     print("\nWelcome to Clashmate!")

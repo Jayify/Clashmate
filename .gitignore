@@ -128,8 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#config files
+# Config files
 config.py
 
-#data files
+# Data files
 player_data.txt
+
+# Dev files
+todo.txt

@@ -11,8 +11,6 @@
 # Imports
 import json
 
-import logic_processor.progress_tracker as progress_tracker
-
 
 # Declare globals
 file_path = "./database/player_data.txt"
@@ -65,11 +63,8 @@ def update_members(clan_members, manual_data):
             manual_data (list): manual data
     """
     new_data = []
-    x = 0
 
     for member in clan_members:
-        x += 1
-        progress_tracker.progress_bar(x, len(clan_members))
         search = in_dict_list('tag', member['tag'], manual_data)
         if search is None:
             new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": [0,0,0], "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})

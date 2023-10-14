@@ -54,6 +54,8 @@ def setup(config_clan_tag):
     progress_tracker.progress_bar(80, 100, "Setup", "Retrieving updated manual data", 20)
     manual_data = file_handler.get_file()
     progress_tracker.progress_bar(100, 100, "Setup", "Complete", 20)
+
+    print("\nWelcome to Clashmate!")
     return clan_data, manual_data
 
 

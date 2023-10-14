@@ -108,14 +108,14 @@ def evaluate(clan, manual_data, filters):
             manual_data (dict): the manual data from the file
             filters (dict): the filters from the config file
     """
-    print('\n----- Evaluating clan: "' + clan['name'] + '" with ' + str(len(clan['memberList'])) + ' members -----')
     members = []
     x = 0
+    print()
 
     # Get rating for each player
     for member in clan['memberList']:
         x += 1
-        progress_tracker.progress_bar(x, len(clan['memberList']))
+        progress_tracker.progress_bar(x, len(clan['memberList']), "Evaluating", f"Evaluating clan '{clan['name']}' with {str(len(clan['memberList']))} members", 20)
         result = calculate_user(member['tag'], manual_data, filters)
         if result == None:
             continue
@@ -123,7 +123,6 @@ def evaluate(clan, manual_data, filters):
             members.append(result)
 
     # Sort players by rating
-    print("\nSorting by rating")
     members.sort(key=sortFunc) # Order by rating value
     members.reverse() # Highest rating first
 

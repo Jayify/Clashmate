@@ -22,6 +22,8 @@ def main(config_clan_tag, filters):
     """
     # Set up
     clan_data, manual_data = event_handler.setup(config_clan_tag)
+    if clan_data == False:
+        return
 
     # Main loop
     event_handler.event_handler(clan_data, manual_data, filters)

@@ -26,7 +26,7 @@ def setup(config_clan_tag):
             config_clan_tag (str): the clan tag from the config file
 
         Returns:
-            clan_data (dict): the clan data
+            clan_data (dict): the clan data, or False if there is an error
             manual_data (dict): the manual data from the file
     """
     print("\n\nStarting Clashmate")
@@ -35,8 +35,14 @@ def setup(config_clan_tag):
     print("\nRetrieving clan data")
     progress_tracker.progress_bar(1, 100, bar_length=20)
     clan_data = api_caller.request_data(config_clan_tag, "clans")
-    progress_tracker.progress_bar(100, 100, bar_length=20)
-
+    
+    # Check for access error
+    if "reason" in clan_data:
+        print(f"\n\nAPI ERROR: {clan_data['reason']}. Message: {clan_data['message']}")
+        print("Suggestion: check that your auth key is correct. You may need to generate a new one from the Clash of Clans developer page as key's are IP locked.")
+        return False, None
+        progress_tracker.progress_bar(100, 100, bar_length=20)
+    
     # Get manual player data
     print("\nRetrieving manual data")
     progress_tracker.progress_bar(1, 100, bar_length=20)

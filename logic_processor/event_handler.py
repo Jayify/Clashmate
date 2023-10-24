@@ -15,6 +15,7 @@ import logic_processor.evaluator as evaluator
 import logic_processor.api_caller as api_caller
 import logic_processor.progress_tracker as progress_tracker
 import data_manager.data_handler as data_handler
+import logic_processor.update_manager as update_manager
 
 
 # Procedures
@@ -59,7 +60,39 @@ def setup(config_clan_tag):
     return clan_data, manual_data
 
 
-# Main loop
+def update_handler(manual_data):
+    """
+        This function is responsible for handling the update loop. It is called when the user wants to add manual data.
+
+        Returns:
+            manual_data (dict): the updated manual data from the file
+    """
+    loop = True
+
+    # User input to choose action
+    while loop:
+        input_num = input("\nEnter a command number:\n - 1: Add war\n - 2: Add CWL\n - 3: Add clan games\n - 4: Add raid weekend\n - 5: Return\n\nInput: ")
+        if input_num == "1":
+            # Add war
+            return update_manager.add_war(manual_data)
+        elif input_num == "2":
+            # Add CWL
+            return update_manager.add_cwl(manual_data)
+        elif input_num == "3":
+            # Add clan games
+            return update_manager.add_clan_games(manual_data)
+        elif input_num == "4":
+            # Add raid weekend
+            return update_manager.add_raid(manual_data)
+        elif input_num == "5":
+            # Return
+            loop = False
+        else:
+            # Error
+            print("\nWARNING: Enter a valid command number")
+    print("Program ended")
+
+
 def event_handler(clan_data, manual_data, filters):
     """
         This function is responsible for running the main loop.
@@ -73,25 +106,28 @@ def event_handler(clan_data, manual_data, filters):
             clan_data (dict): the clan data
             manual_data (dict): the manual data from the file
     """
-    run = True
+    loop = True
+    stored_data = manual_data
 
     # User input to choose action
-    while run:
-        print("\nWelcome to Clashmate!")
-        input_num = input("Enter a command number: \n - 1: Evaluate clan\n - 2: Add manual data\n - 3: Quit\n\nInput: ")
+    while loop:
+        input_num = input("Enter a command number:\n - 1: Evaluate clan\n - 2: Add manual data\n - 3: Config\n - 4: Quit\n\nInput: ")
         if input_num == "1":
             # Evaluate clan
             start = time.time()
-            evaluator.evaluate(clan_data, manual_data, filters)
-            print("\n(runtime:", round(time.time() - start, 2), "second)")
-            run = False
+            evaluator.evaluate(clan_data, stored_data, filters)
+            print("\n(runtime:", round(time.time() - start, 2), "second)\n")
         elif input_num == "2":
             # Add manual data
-            print("\nTo be added")
+            stored_data = update_handler(manual_data)
         elif input_num == "3":
+            # Edit configuration
+            print("\nTo be added")
+        elif input_num == "4":
             # Quit
             print("\nQuitting")
-            run = False
+            loop = False
+            file_handler.update_file(manual_data)
         else:
             # Error
             print("\nWARNING: Enter a valid command number")

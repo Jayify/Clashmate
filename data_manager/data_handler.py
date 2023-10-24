@@ -31,18 +31,18 @@ def in_dict_list(key, value, list):
 
 def update_members(clan_members, manual_data):   
     """
-        This function updates the list of members in the manual player data file.
+        This function updates the list of members in the manual player data file to match with the API data.
 
         Parameters:
             clan_members (list): list of clan members from the api
             manual_data (list): manual data
     """
-    new_data = []
-
     for member in clan_members:
         search = in_dict_list('tag', member['tag'], manual_data)
         if search is None:
-            new_data.append({"name": member['name'],"tag": member['tag'], "warAttacks": [0,0,0], "leagueAttacks": 0, "raidAttacks": 0, "clanGames": 0, "chat": 0})
-        else:
-            new_data.append(search)
-    file_handler.update_file(new_data)
+            manual_data.insert(clan_members.index(member), {"name": member['name'],"tag": member['tag'], "war": [], "cwl": 0, "clanGames": 0, "raid": []})
+    for member in manual_data:
+        search = in_dict_list('tag', member['tag'], clan_members)
+        if search is None:
+            manual_data.remove(member)
+    file_handler.update_file(manual_data)

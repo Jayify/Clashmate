@@ -32,8 +32,8 @@ def retrieve_data(player_tag, manual_data):
     """
     for player in manual_data:
         if player_tag == player["tag"]:
-            return player["warAttacks"], player["leagueAttacks"], player["raidAttacks"], player["clanGames"], player["chat"]
-    return [0,0,0], 0, 0, 0.1, 0
+            return player["war"], player["cwl"], player["raid"], player["clanGames"]
+    return [], 0, 0, 0.1
 
 
 def calculate_user(player_tag, manual_data, filters):
@@ -71,16 +71,17 @@ def calculate_user(player_tag, manual_data, filters):
         clan_capital = 0.1
 
     # Get manual data
-    warAttacks, leagueAttacks, raidAttacks, clanGames, chat = retrieve_data(player_tag, manual_data)
+    war, cwl, raid, clanGames = retrieve_data(player_tag, manual_data)
 
     # Average war attacks
     warAttacks = sum(warAttacks)/len(warAttacks)
 
     # Calculate rating
-    rating = round(hall  + (trophies/300) + (donations/100) + (league/2) + (clan_capital/50000) + (leagueAttacks*1.5) + (warAttacks*5) + raidAttacks + (clanGames/500) + chat)
+    rating = round(hall  + (trophies/300) + (donations/100) + (league/2) + (clan_capital/50000) + (cwl*1.5) + (war*5) + raid + (clanGames/500))
 
     # print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
     # "league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat)
+    # optionally add chat bonus (for players active in the chat)
     
     # return player name and rating
     return user_data['name'], rating

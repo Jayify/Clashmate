@@ -95,10 +95,10 @@ def add_raid(manual_data):
         while loop:
             response = input(f'{player["name"]} capital gold: ')
             if response.isdigit() and int(response) >= 0 and int(response) <= 30000:
-                player['raid'].insert(0, {'capitalGold': int(response)})
+                player['raid'].insert(0, int(response))
                 loop = False
             elif response.lower() == '' or response[0].lower() == 'n':
-                player['raid'].insert(0, {'capitalGold': 0})
+                player['raid'].insert(0, 0)
                 loop = False
             if len(player['raid']) > 4:
                     player['raid'].pop()

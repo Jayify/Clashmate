@@ -87,10 +87,10 @@ def update_handler(manual_data):
         elif input_num == "5":
             # Return
             loop = False
+            print("\nReturning to main menu")
         else:
             # Error
             print("\nWARNING: Enter a valid command number")
-    print("Program ended")
 
 
 def event_handler(clan_data, manual_data, filters):
@@ -111,12 +111,12 @@ def event_handler(clan_data, manual_data, filters):
 
     # User input to choose action
     while loop:
-        input_num = input("Enter a command number:\n - 1: Evaluate clan\n - 2: Add manual data\n - 3: Config\n - 4: Quit\n\nInput: ")
+        input_num = input("\nEnter a command number:\n - 1: Evaluate clan\n - 2: Add manual data\n - 3: Config\n - 4: Quit\n\nInput: ")
         if input_num == "1":
             # Evaluate clan
             start = time.time()
             evaluator.evaluate(clan_data, stored_data, filters)
-            print("\n(runtime:", round(time.time() - start, 2), "second)\n")
+            print("\n(runtime:", round(time.time() - start, 2), "second)")
         elif input_num == "2":
             # Add manual data
             stored_data = update_handler(manual_data)

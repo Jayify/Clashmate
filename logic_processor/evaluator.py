@@ -56,13 +56,11 @@ def calculate_user(player_tag, manual_data, filters):
     trophies = user_data['trophies']
     donations = user_data['donations']
     clan_capital = user_data['clanCapitalContributions']
+
+    # Penalty if unranked
+    leaguePenalty = 0
     if 'league' not in user_data:
-        if filters['displayUnranked']:
-            league = 0.1
-        else:
-            return None
-    else:
-        league = user_data['league']['id']-29000000
+            leaguePenalty = -20
 
     # Set low default value for 0 values to avoid divide by 0 error
     if donations == 0:
@@ -71,18 +69,19 @@ def calculate_user(player_tag, manual_data, filters):
         clan_capital = 0.1
 
     # Get manual data
-    war, cwl, raid, clanGames = retrieve_data(player_tag, manual_data)
+    war_list, cwl_dict, raid_list, clanGames = retrieve_data(player_tag, manual_data)
 
-    # Average war attacks
-    warAttacks = sum(warAttacks)/len(warAttacks)
+    # Handle lists and dicts
+    war = (sum(war_list)/len(war_list))+len(war_list) # Average war attacks plus bonus for being in more wars
+    cwl = (cwl_dict['stars']/cwl_dict['maxAttacks']) + (cwl_dict['attacks']/cwl_dict['maxAttacks']) # Stars plus attack ratio
+    raid = (sum(raid_list)/len(raid_list)) + (len(raid_list)*1000) # Average raid attacks plus bonus for being in more raids
 
     # Calculate rating
-    rating = round(hall  + (trophies/300) + (donations/100) + (league/2) + (clan_capital/50000) + (cwl*1.5) + (war*5) + raid + (clanGames/500))
+    rating = round(hall + (trophies/300) + (donations/100) - (leaguePenalty) + (clan_capital/20000) + (cwl) + (war*1.5) + raid + (clanGames/400))
 
-    # print(user_json['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "capital gold:", (clan_capital/50000), 
-    # "league:", (leagueAttacks*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raidAttacks, "clan games:", (clanGames/500), "chat", chat)
-    # optionally add chat bonus (for players active in the chat)
-    
+    # print(user_data['name'], "hall:", hall, "trophies:", (trophies/300), "donations:", (donations/100), "league:", (league/2), 
+    #      "capital gold:", (clan_capital/50000), "cwl:", (cwl*1.5), "war attacks:", (warAttacks*5), "raid attacks:", raid, "clan games:", (clanGames/500))
+
     # return player name and rating
     return user_data['name'], rating
 

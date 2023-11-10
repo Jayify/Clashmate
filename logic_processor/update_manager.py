@@ -94,7 +94,7 @@ def add_raid(manual_data):
         loop = True
         while loop:
             response = input(f'{player["name"]} capital gold: ')
-            if response.isdigit() and int(response) >= 0 and int(response) <= 30000:
+            if response.isdigit() and int(response) >= 0 and int(response) <= 50000:
                 player['raid'].insert(0, int(response))
                 loop = False
             elif response.lower() == '' or response[0].lower() == 'n':

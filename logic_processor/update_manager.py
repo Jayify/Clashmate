@@ -28,7 +28,7 @@ def add_war(manual_data):
                         if len(player['war']) > 5:
                             player['war'].pop()
                         loop = False
-    print('\nAdding War Stats Complete\n')
+    print('\nAdding War Stats Complete')
 
 
 def add_cwl(manual_data):
@@ -39,7 +39,7 @@ def add_cwl(manual_data):
             manual_data (list): manual data
     """
     print('----- Adding Clan War League Stats -----')
-    print("For each player, enter the number of stars earned (leave the input empty if they didn't participate), the number of attacks used. then the number of attacks they had available.")
+    print("For each player, enter the number of stars earned (leave the input empty if they didn't participate), the number of attacks used, then the number of attacks they had available.")
     for player in manual_data:
         loop = True
         print(f'{player["name"]}:')
@@ -56,7 +56,7 @@ def add_cwl(manual_data):
                             if response_3.isdigit() and int(response_3) >= 0 and int(response_3) <= 7:
                                 player['cwl'] = {'starsGained': int(response_1), 'attacksUsed': int(response_2), 'attacksAvailable': int(response_3)}
                                 loop = False
-    print('\nAdding CWL Stats Complete\n')
+    print('\nAdding CWL Stats Complete')
 
 
 def add_clan_games(manual_data):
@@ -78,7 +78,7 @@ def add_clan_games(manual_data):
             if response.lower() == '' or response[0].lower() == 'n':
                 player['clanGames'] = 0
                 loop = False
-    print('\nAdding Clan Games Stats Complete\n')
+    print('\nAdding Clan Games Stats Complete')
 
 
 def add_raid(manual_data):
@@ -102,5 +102,5 @@ def add_raid(manual_data):
                 loop = False
             if len(player['raid']) > 4:
                     player['raid'].pop()
-    print('\nAdding Raid Weekend Stats Complete\n')
+    print('\nAdding Raid Weekend Stats Complete')
     

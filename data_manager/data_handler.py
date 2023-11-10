@@ -40,7 +40,7 @@ def update_members(clan_members, manual_data):
     for member in clan_members:
         search = in_dict_list('tag', member['tag'], manual_data)
         if search is None:
-            manual_data.insert(clan_members.index(member), {"name": member['name'],"tag": member['tag'], "war": [], "cwl": 0, "clanGames": 0, "raid": []})
+            manual_data.insert(clan_members.index(member), {"name": member['name'],"tag": member['tag'], "war": [], "cwl": {"stars": 0, "attacks": 0, "maxAttacks": 0}, "raid": [], "clanGames": 0})
     for member in manual_data:
         search = in_dict_list('tag', member['tag'], clan_members)
         if search is None:

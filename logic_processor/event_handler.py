@@ -86,20 +86,22 @@ def update_handler(manual_data):
             return update_manager.add_raid(manual_data)
         elif input_num == "5":
             # Return
-            loop = False
             print("\nReturning to main menu")
+            file_handler.update_file(manual_data)
+            return manual_data
         else:
             # Error
             print("\nWARNING: Enter a valid command number")
+    
 
 
-def event_handler(clan_data, manual_data, filters):
+def event_handler(clan_data, stored_data, filters):
     """
         This function is responsible for running the main loop.
 
         Parameters:
             clan_data (dict): the clan data
-            manual_data (dict): the manual data from the file
+            stored_data (dict): the manual data from the file
             filters (dict): the filters from the config file
 
         Returns:
@@ -107,7 +109,6 @@ def event_handler(clan_data, manual_data, filters):
             manual_data (dict): the manual data from the file
     """
     loop = True
-    stored_data = manual_data
 
     # User input to choose action
     while loop:
@@ -119,7 +120,9 @@ def event_handler(clan_data, manual_data, filters):
             print("\n(runtime:", round(time.time() - start, 2), "second)")
         elif input_num == "2":
             # Add manual data
-            stored_data = update_handler(manual_data)
+            stored_data = update_handler(stored_data)
+            # Update local stored data
+            file_handler.update_file(stored_data)
         elif input_num == "3":
             # Edit configuration
             print("\nTo be added")
@@ -127,7 +130,7 @@ def event_handler(clan_data, manual_data, filters):
             # Quit
             print("\nQuitting")
             loop = False
-            file_handler.update_file(manual_data)
+            file_handler.update_file(stored_data)
         else:
             # Error
             print("\nWARNING: Enter a valid command number")

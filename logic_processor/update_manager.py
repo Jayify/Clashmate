@@ -29,6 +29,7 @@ def add_war(manual_data):
                             player['war'].pop()
                         loop = False
     print('\nAdding War Stats Complete')
+    return manual_data
 
 
 def add_cwl(manual_data):
@@ -57,6 +58,7 @@ def add_cwl(manual_data):
                                 player['cwl'] = {'stars': int(response_1), 'attacks': int(response_2), 'maxAttacks': int(response_3)}
                                 loop = False
     print('\nAdding CWL Stats Complete')
+    return manual_data
 
 
 def add_clan_games(manual_data):
@@ -79,6 +81,7 @@ def add_clan_games(manual_data):
                 player['clanGames'] = 0
                 loop = False
     print('\nAdding Clan Games Stats Complete')
+    return manual_data
 
 
 def add_raid(manual_data):
@@ -103,4 +106,5 @@ def add_raid(manual_data):
             if len(player['raid']) > 4:
                     player['raid'].pop()
     print('\nAdding Raid Weekend Stats Complete')
+    return manual_data
     

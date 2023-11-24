@@ -39,13 +39,13 @@ Developed by Jayden Houghton, 2023
 
 ## Evaluation Equation Justification
 
-The purpose of the rating is to give a rough idea of how much a player contributes to the clan. The equation is designed to mainly emphasise participation, however greater scores are given for higher level and higher skilled players as rhis benefits the clan.
+The purpose of the rating is to give a rough idea of how much a player contributes to the clan. The equation is designed to mainly emphasise participation, however greater scores are given for higher level and higher skilled players as this benefits the clan.
 
 A high level and well contributing player should have a score of around 100. There is no max value, as stats such as donations have no limit.
 <br><br>
 
 Example Player Stats:
 <li>Hall: 11, trophies: 3,000, donations: 1,000, league: 15 (Masters 1), capital gold: 200,000, cwl: 2 star for each of 7 days, war: 5 starts over 2 attacks over 4 wars, raid: 10,000 for 4 raids, clan games: 4,000</li>
-<li>Rating = hall: 11, trophies: 10, donations: 10, leaguePenalty: 0, capital gold: 10, cwl: 10.5 , war: 12.5, raid: 14, clan games: 10 = 77</li>
+<li>Rating = hall: 11, trophies: 10, donations: 10, leaguePenalty: 0, capital gold: 10, cwl: 10.5 , war: 12.5, raid: 13, clan games: 10 = 76</li>
 
 

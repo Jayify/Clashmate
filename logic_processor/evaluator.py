@@ -72,9 +72,9 @@ def calculate_user(player_tag, manual_data, filters):
     war_list, cwl_dict, raid_list, clanGames = retrieve_data(player_tag, manual_data)
 
     # Handle lists and dicts
-    war = (sum(war_list)/len(war_list))+len(war_list) if war_list != [] else 0 # Average war attacks plus bonus for being in more wars
+    war = (sum(war["starsGained"] for war in war_list))+len(war_list) if war_list != [] else 0 # Average war attacks plus bonus for being in more wars
     cwl = (cwl_dict['stars']/cwl_dict['maxAttacks']) + (cwl_dict['attacks']/cwl_dict['maxAttacks']) if cwl_dict['maxAttacks'] != 0 else 0 # Stars plus attack ratio
-    raid = (sum(raid_list)/len(raid_list)) + (len(raid_list)*1000) if raid_list != [] else 0 # Average raid attacks plus bonus for being in more raids
+    raid = (int(sum(raid_list)/len(raid_list))) + (len(raid_list)*1000) if raid_list != [] else 0 # Average raid attacks plus bonus for being in more raids
 
     # Calculate rating
     rating = round(hall + (trophies/300) + (donations/100) - (leaguePenalty) + (clan_capital/20000) + (cwl) + (war*1.5) + raid + (clanGames/400))
